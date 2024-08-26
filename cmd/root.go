@@ -22,10 +22,13 @@ THE SOFTWARE.
 package cmd
 
 import (
+	"fmt"
 	"os"
 
+	"github.com/Kimoto-Norihiro/llmcli/llm_models"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"github.com/tmc/langchaingo/llms"
 )
 
 var cfgFile string
@@ -34,9 +37,7 @@ var cfgFile string
 var rootCmd = &cobra.Command{
 	Use:   "llmcli",
 	Short: "You can use this CLI to interact with the LLM API",
-	Run: func(cmd *cobra.Command, args []string) {
-		cmd.Help()
-	},
+	Run:   run,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },
@@ -57,7 +58,7 @@ func init() {
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
-
+	rootCmd.PersistentFlags().String("prompt", "", "The prompt to send to the LLM API")
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.llmcli.yaml)")
 }
 
@@ -90,5 +91,33 @@ func initConfig() {
 			_, err = os.Create(home + "/.llmcli.yaml")
 			cobra.CheckErr(err)
 		}
+	}
+}
+
+func run(cmd *cobra.Command, args []string) {
+	prompt, err := cmd.Flags().GetString("prompt")
+	if err != nil {
+		cobra.CheckErr(err)
+	}
+
+	llmModels, err := llm_models.NewLLM(cmd.Context(), "gemini")
+	if err != nil {
+		cobra.CheckErr(err)
+	}
+
+	resp, err := llmModels.GenerateContent(cmd.Context(), []llms.MessageContent{
+		{
+			Role: llms.ChatMessageTypeHuman,
+			Parts: []llms.ContentPart{
+				llms.TextPart(prompt),
+			},
+		},
+	})
+	if err != nil {
+		cobra.CheckErr(err)
+	}
+
+	for _, choice := range resp.Choices {
+		fmt.Println(choice.Content)
 	}
 }
