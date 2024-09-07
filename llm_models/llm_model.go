@@ -11,31 +11,31 @@ import (
 	"github.com/tmc/langchaingo/llms/openai"
 )
 
-type LLMs struct {
-	llm llms.LLM
+type LLM struct {
+	llm llms.Model
 }
 
-func NewLLM(ctx context.Context, kind string) (*LLMs, error) {
+func NewLLM(ctx context.Context, kind string) (*LLM, error) {
 	switch kind {
 	case "gpt":
 		gpt, err := generateGptModel()
 		if err != nil {
 			return nil, err
 		}
-		return &LLMs{llm: gpt}, nil
+		return &LLM{llm: gpt}, nil
 	case "gemini":
 		gemini, err := generateGeminiModel(ctx)
 		if err != nil {
 			return nil, err
 		}
 
-		return &LLMs{llm: gemini}, nil
+		return &LLM{llm: gemini}, nil
 	default:
 		return nil, errors.New("unknown LLM kind")
 	}
 }
 
-func (l *LLMs) GenerateContent(ctx context.Context, messages []llms.MessageContent, options ...llms.CallOption) (*llms.ContentResponse, error) {
+func (l *LLM) GenerateContent(ctx context.Context, messages []llms.MessageContent, options ...llms.CallOption) (*llms.ContentResponse, error) {
 	return l.llm.GenerateContent(ctx, messages, options...)
 }
 

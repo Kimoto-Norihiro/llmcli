@@ -3,6 +3,12 @@ module github.com/Kimoto-Norihiro/llmcli
 go 1.22.6
 
 require (
+	github.com/spf13/cobra v1.8.1
+	github.com/spf13/viper v1.19.0
+	github.com/tmc/langchaingo v0.1.12
+)
+
+require (
 	cloud.google.com/go v0.113.0 // indirect
 	cloud.google.com/go/ai v0.6.0 // indirect
 	cloud.google.com/go/aiplatform v1.67.0 // indirect
@@ -35,11 +41,8 @@ require (
 	github.com/sourcegraph/conc v0.3.0 // indirect
 	github.com/spf13/afero v1.11.0 // indirect
 	github.com/spf13/cast v1.6.0 // indirect
-	github.com/spf13/cobra v1.8.1 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
-	github.com/spf13/viper v1.19.0 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
-	github.com/tmc/langchaingo v0.1.12 // indirect
 	go.opencensus.io v0.24.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.51.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.51.0 // indirect
